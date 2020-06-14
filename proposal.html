@@ -36,7 +36,7 @@
 
 
 
-    <meta name="description" content="Content">
+    <meta name="description" content="Using GANs to Achieve Text-to-Image Synthesis Proposal In the past, users often have to use information retrieval and information...">
 
     <meta name="author" content="GhostAndMonsters">
 
@@ -47,7 +47,7 @@
 <!-- Open Graph -->
 <meta property="og:site_name" content="Using GANs to Achieve Text-to-Face Synthesis"/>
 <meta property="og:title" content="Proposal"/>
-<meta property="og:description" content="Content"/>
+<meta property="og:description" content="Using GANs to Achieve Text-to-Image Synthesis Proposal In the past, users often have to use information retrieval and information..."/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:url" content="https://i.cs.hku.hk/~msp19004/proposal.html"/>
 <meta property="og:type" content="article"/>
@@ -74,7 +74,7 @@
   },
   "image": "https://i.cs.hku.hk/~msp19004/theme/images/post-bg.jpg",
   "url": "https://i.cs.hku.hk/~msp19004/proposal.html",
-  "description": "Content"
+  "description": "Using GANs to Achieve Text-to-Image Synthesis Proposal In the past, users often have to use information retrieval and information..."
 }
 </script>
 </head>
@@ -126,7 +126,20 @@
         <article class="post">
         <div class="inner">
             <section class="post-content">
-                <p>Content</p>
+                <h2>Using GANs to Achieve Text-to-Image Synthesis</h2>
+<h3>Proposal</h3>
+<p>In the past, users often have to use information retrieval and information traversal to obtain the information they need from Internet. For example, when one user needs a picture of a cat drinking water, he/she has only go to a search engine to search for existing pictures based on keywords. He/she cannot get automatically generated pictures according to personal requirements. Recently, GANs (Generative Adversarial Networks) has made great progress in generating high-quality images and it also can play an important role in generate images from textual description. In this project, our team are going to use the latest GANs to achieve text-to-image synthesis. It combines computer vison and natural language processing technology. We are going to take advantage of natural language processing technology to understand textual description in the input statement and then, use GANs to generate accurate and natural images, which can include all essential elements in the statement. This technology can help uses quickly generate a picture that meets their requirements when searching for pictures, instead of enumerating all relevant pictures in the database for the user to choose, which is very inefficient.<br>
+Nowadays, there are three main methods used to generate images from natural language descriptions.<br></p>
+<h4>Direct Text-to-Image synthesis</h4>
+<p>This kind of approach is to generate images only by image caption without relying on additional conditional information and intermediate representation tools such as screen graph. Scott Reed [1] in 2016 use GAN to generate images based on detailed visual descriptions directly, which trains a generator to synthesize images and a discriminator to classify images as real or fake.</p>
+<h4>Text-to-Image synthesis with layout</h4>
+<p>It is difficult to directly generate an image that contain multiple objects. Many current approaches also use additional information such as bounding boxes for objects or intermediate representations such as scene graphs or scenes layouts. The limitation of approaches that generates images on natural language description is obviously as giving stunning results on limited domains such as birds or flowers descriptions. To reproduce the images with bounding boxes or segmentation, as the input of neural network instead of unstructured text. Justin Johnson [2] firstly used a scene graph to generate an image layout and finally generate a complex image with many objects.</p>
+<h4>Semantic Image Manipulation</h4>
+<p>This kind of generating approach is conditioned not only on image caption but also on a dialogue that further describes the scene. This dynamic image-generating work allows humans to describe the image step by step and allows the semantic manipulation of the image. The authors [3] implement interactive image generation and update the scene graph from the text over the course of the interaction.<br>
+At the end of this project, we are going to provide text2image service to users with the help of mobile application and website. The application will receive the descriptions of an object from a user as input and generate a corresponding image. With the facilitation of the application, the user can obtain images without painting and designing skills. It can help users become a designer of their own and express their ideas better. We expect this project to help us learn to the latest knowledge in this domain and bring this technology into real world.<br></p>
+<p>[1] S. Reed, Z. Akata, X. Yan, L. Logeswaran, B. Schiele, and H. Lee, “Generative adversarial text to image synthesis,” in Proc. Int. Conf. Mach. Learn., 2016, pp. 1060–1069. <br>
+[2]  J. Johnson, A. Gupta, and L. Fei-Fei, “Image generation from scene graphs,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit., 2018, pp. 1219–1228.  <br>
+[3]  G. Mittal, S. Agrawal, A. Agarwal, S. Mehta, and T. Marwah, “Interactive image generation using scene graphs,” in Proc. Int. Conf. Learn. Representations Workshop, 2019. </p>
             </section>
 
             <section class="post-info">
