@@ -135,7 +135,74 @@ Hong Chen 3035673480<br></p>
 <h3>Work done so far:</h3>
 <h4>1. Webpage Design</h4>
 <p>The website development was initially based on GitHub Page, powered by Pelican. Afterwards, the website was transferred to the server according to the latest requirements from the department. Pelican is a static site generator, which is most suitable for the project introductory page. It can be easily hosted by any server from Github Page to individual PC. Pelican is written in Python and can be installed as a python package. Pelican enables users to initialize a quick-start personal blog site by specifying basic configurations. After the initialization, Pelican website directory has a file structure of the content files, output directory, and the configuration file. The content directory contains all the source markdown files and images. After the Pelican processes the content, it will output all the html, css, and js files in the output directory as shown in Fig 1, which are both required to consist a website. The website is migrated to the required server through Github remote synchronization.<br>
-<img alt="figure1" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure1"></p>
+<img alt="figure1" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure1">
+Fig 1, The file structure in GitHub<br>
+ https://github.com/GhostAndMonsters/project_webpage<br>
+<img alt="figure2" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure2">
+Fig 2, The webpage of our project<br>
+https://i.cs.hku.hk/~msp19004/<br></p>
+<h4>2. Dataset</h4>
+<h5>2.1 Introduction</h5>
+<p>Text-to-face synthesis is a sub-domain of text-image synthesis. For text-image synthesis, the most recently used datasets are CUB [1], Oxford102 [2], and COCO [3]. However, these datasets are not suitable for this task very well. There are almost no related researches focusing on text-to-face synthesis with lack of available dataset. We have to build our dataset named Text-to-Face based on dataset CelebFaces Attributes Dataset [4]. CelebFaces Attributes Dataset (CelebA) is a large human face attributes dataset, built by The Chinese University of Hong Kong, with more than 200k images, each with 40 manually marked attribute annotations.
+<img alt="figure3" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure3">
+Fig 3, All available face attributes in CelebA.<br></p>
+<h5>2.2 Buiding Dataset</h5>
+<p>The authors [5] built a similar dataset with face images and corresponding description sentences using the attributes in CelebA. In their dataset, there are five different sentences for every face image and every caption contains 4 to 6 different attributes. Our own dataset, named Text-to-Face, is built with a similar construction method with them. There are currently three different sentence templates where there are simple subject, predicate, and object.<br>
+In the process of generating sentences, there are some grammatical structures we should pay attention to. Different kinds of attributes may have different syntactic positions. It is necessary to classify them to generate more readable and accurate sentences. For example, the “Male” attribute, which is a nominal word, can only act as the subject in final generated sentences. The “Young” attribute can only be inserted in the front of the subject.
+Until now, Text-to-Face dataset contains 7500 face images, with 3 different description sentences per image.
+<img alt="figure4" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure4">
+Fig 4, Some examples of Text-to-Face. Face images are selected from CelebA. There are three description sentences for every image<br></p>
+<h4>3. Model</h4>
+<h5>3.1 Methodology of AttnGAN</h5>
+<p>The AttnGAN introduces attention mechanism into the generation process and implements multi-stage refinement for the fine-grained text-to-image generation [6]. It can focus on word-level information instead of focusing only on sentence-level information like most of the prior works. It also introduces a Deep Attentional Multimodal Similarity Model (DAMSM), which can evaluate the similarity between the input sentence and the output image, and can provide a matching loss into the loss function [6].<br>
+In the generation process, the AttnGAN will firstly generate an initial image based on a sentence vector. Then, it tries to gain word-level information using the attention model and add details to the sub-regions of the image by focusing on the most relevant words. The detailed model architecture is given in Fig 5.
+<img alt="figure5" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure5">
+Fig 5, The overall architecture of the AttnGAN [6]<br></p>
+<h5>3.2 Results with AttnGAN</h5>
+<p>As planned in our schedule, we tried to directly implement the source code of AttnGAN [6] without any nonessential modifications to prove its capability in generating realistic face images and also compare its results with DM-GAN. In this process, five thousand face images from our own generated text-face dataset are used to train corresponding generative and discriminative modules.<br>
+Firstly, the dataset is used to train the Deep Attentional Multimodal Similarity Model, which will provide a fine-grained loss for the following image generation process. In this step, an image encoder and a text encoder are trained to extract corresponding feature vectors. Some hyperparameters are modified from recommended configuration according to our experiment conditions. The batch size is decreased to 50 in order to reduce the need for memory. In our own generated dataset, there are three corresponding description sentences for every image. Therefore, the CAPTION_PER_IMAGE is set to 3. In training, the algorithm will randomly select one matching sentence to generate a matching data pair.<br>
+After finishing the training for image encoder and text encoder, the dataset is again used to train three generators and corresponding discriminators in the Attentional Generative network. The same hyperparameter setting shown in Table 1 is adopted in this step.
+<img alt="table1" src="https://i.cs.hku.hk/~msp19004/images/mid_report/table1">
+Table 1, Hyperparameters chosen in training AttnGAN<br></p>
+<h5>3.3 Results of AttnGAN</h5>
+<p><img alt="figure6_1" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure6_1">
+<img alt="figure6_2" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure6_2">
+<img alt="figure6_3" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure6_3">
+Fig 6, Comparisons result in AttnGAN<br></p>
+<h5>3.4 Observation about Results of AttnGAN</h5>
+<p>It is obvious that the AttnGAN not only can generate the outline of the face image, but also the details of the facial features. But the generated images are still blurry, which indicates the multiple generators in the Attentional Generative network do not achieve their purposes well. Next, we will focus on tuning the parameters of it, and even the structure of the model to improve its performance.<br>
+Although these comparison results can prove the AttnGAN’s ability in generating face images from textual description, the background of generated image is still messy. Due to no any related information about background in the input sentence, it is difficult for the model to learn any useful features about the background. Next, we may preprocess all training face images with the same background. It is likely to reduce the distraction from different backgrounds.<br></p>
+<h5>3.5 Methodology of DM-GAN</h5>
+<p>DM-GAN focuses on two problems in current text-to-image synthesis algorithms. The first is low-quality initial generated images in the multi-stage generating process would negatively affect the quality of final output images. The second is although each word in the text should make a different contribution into different sub-regions of the final image, word representation stilly remains the same during the whole multi-stage generation process. To solve aforementioned two problems, it combines Generative Adversarial Networks with a dynamic memory system [7].
+<img alt="figure7" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure7">
+Fig 7, The overall architecture of DM-GAN for text-to-image synthesis [7].<br></p>
+<h5>3.6 Experiments with DM-GAN</h5>
+<p>We also directly implemented the source code of DM-GAN [7] without any nonessential modifications to prove its feasibility in generating realistic face images. To ensure fairness of comparison results with AttnGAN, the same size dataset is used to train related models in DM-GAN.<br>
+Firstly, DM-GAN also uses DAMSM to measure the matching degree between generated images and input textual description, and provide a fine-grained loss. It adopts the same architecture as the one in AttnGAN. In order to speed up working progress and reduce training computation, we directly adopted the trained DAMSM in previous AttnGAN in this step.<br>
+Afterwards, the same size dataset is again used to train the generative model in the initial image generation stage of DM-GAN and relevant dynamic memory gate models in the image refinement stage. <br>
+<img alt="table2" src="https://i.cs.hku.hk/~msp19004/images/mid_report/table2">
+Table 2, Hyperparameters chosen in training DM-GAN<br></p>
+<h5>3.7 Results of DM-GAN</h5>
+<p><img alt="figure8_1" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure8_1">
+<img alt="figure8_2" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure8_2">
+<img alt="figure8_3" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure8_3">
+Fig 8, Comparisons result in DM-GAN<br></p>
+<h5>3.8 Observation about Results of DM-GAN</h5>
+<p>The generated face images from DM-GAN have the basic face outline. However, they do not show detailed facial features. By contrast, AttnGAN has better performance in generating facial features. We may add more specific descriptions into the captions to help the model capture detailed features. The same background clutter issue also exists in DM-GAN. We will adopt same strategy mentioned above to improve the generation performance.</p>
+<h3>Conclusions from initial work</h3>
+<p>Our project progress is in line with our time schedule and it is proceeding steadily. We have basically completed the preliminary work goal, including face-text dataset collection and construction, testing the feasibility of AttnGAN and DM-GAN, and webpage design. As for the face-text dataset, we have designed three sentence templates and use different attributes to combine three different sentences. There are 7,500 face images and corresponding three captions in our dataset and we will determine whether to increase its size according to the performance of model. We can see from these comparison results in AttnGAN and DM-DM that both of them have the ability to generate face image. Although these generated face images are mismatching and blurry, they can still learn some common features from training samples, such as “High_Checkbones”, “Mouth_Slightly_Open” and so on. It is clear that the performance in AttnGAN is better than DM-GAN from above generation samples. It is very likely that AttnGAN will become the dominant model in our project. Next, we will try to tune the hyperparameters and modify model structure to increase the generation performance.</p>
+<h3>Work to be done</h3>
+<p><img alt="table3" src="https://i.cs.hku.hk/~msp19004/images/mid_report/table3">
+<img alt="figure9" src="https://i.cs.hku.hk/~msp19004/images/mid_report/figure9">
+Fig 9, The scheduled timeline for the following period.<br></p>
+<h3>References</h3>
+<p>[1] C. Wah, S. Branson, P. Welinder, P. Perona, and S. J. Belongie. The caltech-ucsd birds-200-2011 dataset. Advances in Water Resources, 2011. <br>
+[2] M. E. Nilsback and A. Zisserman. Automated flower classification over a large number of classes. In Conference on Computer Vision, Graphics &amp; Image Processing, 2009. <br>
+[3] T. Lin, M. Maire, S. J. Belongie, J. Hays, P. Perona, D. Ramanan, P. Dollar, and C. L. Zitnick. Microsoft coco: Common objects in context. In european conference on computer vision, pages 740–755, 2014. <br>
+[4] Z. Liu, P. Luo, X. Wang, and X. Tang. Deep learning face attributes in the wild. In international conference on computer vision, pages 3730–3738, 2015.<br>
+[5] https://arxiv.org/abs/1904.05729<br>
+[6] Tao Xu, Pengchuan Zhang, Qiuyuan Huang, Han Zhang, Zhe Gan, Xiaolei Huang, and Xiaodong He. Attngan: Fine-grained text to image generation with attentional generative adversarial networks. In CVPR, 2018. <br>
+[7] M. Zhu, P. Pan, W. Chen and Y. Yang, "DM-GAN: Dynamic Memory Generative Adversarial Networks for Text-To-Image Synthesis," in 2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Long Beach, CA, USA, 2019 pp. 5795-5803.<br></p>
             </section>
 
             <section class="post-info">
